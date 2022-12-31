@@ -24,6 +24,11 @@ for file in g:
     initialSpace = initialSpace + str(round(os.path.getsize(file)/1024, 2)) + " " + str(width) + " x " + str(height)
     videoList.append(initialSpace)
 
+
+
+for a in videoList:
+    print(a)
+
 root = tk.Tk()
 root.geometry("500x500")
 root.resizable(False, False)
@@ -36,26 +41,20 @@ def open_select_video_window():
     var2 = tk.StringVar()
     var2.set(videoList)
     size = selected_size.get()
-    def choose():
-        print("asdf")
-        for item in lb.curselection():
-            print(item)
-
     def do_it():
         if size == "0":
-            print("asdf")
             for item in lb.curselection():
                 scale(item)
         elif size == "1":
             for item in lb.curselection():
                 get_input = tk.Toplevel(new)
                 get_input.geometry("300x300")
-                height = tk.Label(get_input, text="height")
-                height_input = tk.Entry(get_input)
                 width = tk.Label(get_input, text="width")
                 width_input = tk.Entry(get_input)
+                height = tk.Label(get_input, text="height")
+                height_input = tk.Entry(get_input)
                 def save():
-                    compress(item, height_input.get(), width_input.get())
+                    compress(item, width_input.get(), height_input.get())
                 height.pack()
                 height_input.pack()
                 width.pack()
@@ -71,11 +70,11 @@ def open_select_video_window():
 def scale(item):
     subprocess.run("ffmpeg -i " + g[item] + " New" + g[item])
 
-def compress(item, height, width):
+def compress(item, width, height):
     subprocess.run("ffmpeg -i " + g[item] +
                    " -vf scale=" + height +
                    ":" + width +
-                   " " + height + "_" + width + g[item])
+                   " " + width + "_" + height + g[item])
 selected_size = tk.StringVar()
 sizes = (("Scaling", 0),
          ("Compression", 1))
